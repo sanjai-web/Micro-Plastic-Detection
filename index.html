@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AI-Powered Microplastic Detection Platform - Real-time monitoring of microplastics in blood and water">
+  <title>MicroGuard - AI-Powered Microplastic Detection</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Tailwind Config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            primary: {
+              DEFAULT: '#0ea5e9', // Sky 500
+              dark: '#0284c7',   // Sky 600
+              light: '#38bdf8',  // Sky 400
+            },
+            secondary: {
+              DEFAULT: '#8b5cf6', // Violet 500
+              dark: '#7c3aed',   // Violet 600
+              light: '#a78bfa',  // Violet 400
+            },
+            dark: {
+              900: '#0f172a',    // Slate 900
+              800: '#1e293b',    // Slate 800
+              700: '#334155',    // Slate 700
+            }
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-20px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom Styles (Animations) -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-dark-900 text-slate-100 font-sans antialiased overflow-x-hidden selection:bg-primary selection:text-white">
+
+  <!-- Navigation Bar -->
+  <nav class="fixed w-full z-50 top-0 start-0 border-b border-white/10 bg-dark-900/80 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between mx-auto p-4">
+      <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse group">
+        <span class="text-2xl font-display font-bold bg-gradient-to-r from-primary-light to-secondary-light bg-clip-text text-transparent group-hover:to-primary transition-all duration-300">MicroGuard</span>
+      </a>
+      <div class="flex gap-3 md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+        <button onclick="openLoginModal()" class="text-slate-300 hover:text-white font-medium rounded-lg text-sm px-4 py-2 text-center transition-colors">Login</button>
+        <button onclick="openSignupModal()" class="text-white bg-primary hover:bg-primary-dark focus:ring-4 focus:outline-none focus:ring-primary/30 font-medium rounded-full text-sm px-6 py-2.5 text-center transition-all shadow-[0_0_20px_rgba(14,165,233,0.3)] hover:shadow-[0_0_30px_rgba(14,165,233,0.5)]">Get Started</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+    <!-- Background Effects -->
+    <div class="absolute inset-0 z-0">
+      <div class="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[128px] animate-pulse-slow"></div>
+      <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/20 rounded-full blur-[128px] animate-pulse-slow" style="animation-delay: 2s;"></div>
+      <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 mix-blend-overlay"></div>
+    </div>
+    
+    <!-- Particles Container -->
+    <div id="particles" class="absolute inset-0 z-0 overflow-hidden pointer-events-none"></div>
+
+    <div class="relative z-10 max-w-5xl mx-auto px-4 text-center">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-primary-light text-sm font-medium mb-8 animate-fade-in backdrop-blur-sm">
+        <span class="flex h-2 w-2 rounded-full bg-primary animate-pulse"></span>
+        AI-Powered Detection System
+      </div>
+      
+      <h1 class="text-5xl md:text-7xl font-display font-bold tracking-tight mb-8 leading-tight animate-slide-up">
+        Detect Microplastics <br />
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-light via-white to-secondary-light">In Real-Time</span>
+      </h1>
+      
+      <p class="text-lg md:text-xl text-slate-400 mb-12 max-w-2xl mx-auto leading-relaxed animate-slide-up" style="animation-delay: 0.1s;">
+        Protect your health with advanced IoT sensors and AI analysis. Monitor contamination levels in blood and water with laboratory-grade precision.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up" style="animation-delay: 0.2s;">
+        <button onclick="openSignupModal()" class="w-full sm:w-auto px-8 py-4 bg-white text-dark-900 rounded-full font-semibold hover:bg-slate-100 transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:scale-105 active:scale-95">
+          Start Monitoring Free
+        </button>
+        <button onclick="scrollToFeatures()" class="w-full sm:w-auto px-8 py-4 bg-transparent border border-white/20 text-white rounded-full font-semibold hover:bg-white/5 transition-all hover:scale-105 active:scale-95 backdrop-blur-sm group">
+          Explore Features <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="py-32 bg-dark-900 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-20">
+        <h2 class="text-3xl md:text-5xl font-display font-bold mb-6">Advanced Detection Technology</h2>
+        <p class="text-slate-400 max-w-2xl mx-auto text-lg">Comprehensive microplastic monitoring powered by next-gen IoT hardware and Gemini AI analysis.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Feature 1 -->
+        <div class="group p-8 rounded-3xl bg-dark-800/50 border border-white/5 hover:border-primary/50 hover:bg-dark-800 transition-all duration-300 hover:-translate-y-2 relative overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div class="relative z-10">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center text-3xl mb-6 shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform duration-300">🩸</div>
+            <h3 class="text-xl font-bold mb-3 text-white">Blood Detection</h3>
+            <p class="text-slate-400 leading-relaxed">Real-time analysis of microplastic contamination in blood samples with AI-powered health insights.</p>
+          </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="group p-8 rounded-3xl bg-dark-800/50 border border-white/5 hover:border-secondary/50 hover:bg-dark-800 transition-all duration-300 hover:-translate-y-2 relative overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-br from-secondary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div class="relative z-10">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-secondary to-secondary-dark flex items-center justify-center text-3xl mb-6 shadow-lg shadow-secondary/20 group-hover:scale-110 transition-transform duration-300">💧</div>
+            <h3 class="text-xl font-bold mb-3 text-white">Water Quality</h3>
+            <p class="text-slate-400 leading-relaxed">Monitor water safety with instant microplastic detection and environmental impact assessment.</p>
+          </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="group p-8 rounded-3xl bg-dark-800/50 border border-white/5 hover:border-primary/50 hover:bg-dark-800 transition-all duration-300 hover:-translate-y-2 relative overflow-hidden">
+           <div class="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div class="relative z-10">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center text-3xl mb-6 shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform duration-300">🤖</div>
+            <h3 class="text-xl font-bold mb-3 text-white">AI Analysis</h3>
+            <p class="text-slate-400 leading-relaxed">Advanced Gemini AI processes detection data to provide risk levels and health recommendations.</p>
+          </div>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="group p-8 rounded-3xl bg-dark-800/50 border border-white/5 hover:border-secondary/50 hover:bg-dark-800 transition-all duration-300 hover:-translate-y-2 relative overflow-hidden">
+           <div class="absolute inset-0 bg-gradient-to-br from-secondary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div class="relative z-10">
+             <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-secondary to-secondary-dark flex items-center justify-center text-3xl mb-6 shadow-lg shadow-secondary/20 group-hover:scale-110 transition-transform duration-300">📊</div>
+            <h3 class="text-xl font-bold mb-3 text-white">Historical Tracking</h3>
+            <p class="text-slate-400 leading-relaxed">Visualize trends over time with interactive charts and receive smart recommendations.</p>
+          </div>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="group p-8 rounded-3xl bg-dark-800/50 border border-white/5 hover:border-primary/50 hover:bg-dark-800 transition-all duration-300 hover:-translate-y-2 relative overflow-hidden">
+           <div class="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div class="relative z-10">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center text-3xl mb-6 shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform duration-300">⚡</div>
+            <h3 class="text-xl font-bold mb-3 text-white">Real-Time Updates</h3>
+            <p class="text-slate-400 leading-relaxed">Live sensor data streaming from IoT hardware devices with instant notifications.</p>
+          </div>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="group p-8 rounded-3xl bg-dark-800/50 border border-white/5 hover:border-secondary/50 hover:bg-dark-800 transition-all duration-300 hover:-translate-y-2 relative overflow-hidden">
+           <div class="absolute inset-0 bg-gradient-to-br from-secondary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div class="relative z-10">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-secondary to-secondary-dark flex items-center justify-center text-3xl mb-6 shadow-lg shadow-secondary/20 group-hover:scale-110 transition-transform duration-300">🔒</div>
+            <h3 class="text-xl font-bold mb-3 text-white">Secure & Private</h3>
+            <p class="text-slate-400 leading-relaxed">Your data is encrypted and securely stored, ensuring complete privacy and protection.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-24 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-dark-900 to-primary/20"></div>
+    <div class="max-w-4xl mx-auto px-4 relative z-10 text-center">
+      <h2 class="text-4xl md:text-6xl font-display font-bold mb-6 bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">Ready to Monitor Your Health?</h2>
+      <p class="text-xl text-slate-400 mb-10">Join thousands of users protecting their health with real-time microplastic detection.</p>
+      <button onclick="openSignupModal()" class="px-10 py-5 bg-primary hover:bg-primary-dark text-white rounded-full font-bold text-lg shadow-[0_0_40px_rgba(14,165,233,0.4)] hover:shadow-[0_0_60px_rgba(14,165,233,0.6)] hover:scale-105 active:scale-95 transition-all duration-300">
+        Create Free Account
+      </button>
+    </div>
+  </section>
+
+  <!-- Login Modal -->
+  <div id="loginModal" class="fixed inset-0 z-[100] flex items-center justify-center opacity-0 invisible transition-all duration-300">
+    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm modal-backdrop" onclick="closeLoginModal()"></div>
+    
+    <div class="relative bg-dark-800 border border-white/10 rounded-3xl p-8 w-full max-w-md shadow-2xl scale-95 transition-all duration-300" id="loginContent">
+      <div class="flex justify-between items-center mb-8">
+        <h2 class="text-2xl font-bold font-display">Welcome Back</h2>
+        <button onclick="closeLoginModal()" class="text-slate-400 hover:text-white transition-colors bg-white/5 hover:bg-white/10 p-2 rounded-lg">
+          <svg class="w-5 h-5" fill="none" class="w-6 h-6" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      
+      <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-5">
+        <div>
+          <label class="block text-sm font-medium text-slate-400 mb-2">Email Address</label>
+          <input type="email" id="loginEmail" required class="w-full bg-dark-900/50 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors placeholder:text-slate-600" placeholder="your@email.com">
+        </div>
+        
+        <div>
+           <label class="block text-sm font-medium text-slate-400 mb-2">Password</label>
+           <input type="password" id="loginPassword" required class="w-full bg-dark-900/50 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors placeholder:text-slate-600" placeholder="Enter your password">
+        </div>
+
+        <div id="loginError" class="text-red-400 text-sm hidden bg-red-500/10 p-3 rounded-lg border border-red-500/20"></div>
+
+        <button type="submit" id="loginBtn" class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3.5 rounded-xl transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
+          Login
+        </button>
+      </form>
+      
+      <p class="text-center mt-6 text-slate-400 text-sm">
+        Don't have an account? <a href="#" onclick="switchToSignup(event)" class="text-primary hover:text-primary-light font-medium transition-colors">Sign up</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Signup Modal -->
+  <div id="signupModal" class="fixed inset-0 z-[100] flex items-center justify-center opacity-0 invisible transition-all duration-300">
+    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm modal-backdrop" onclick="closeSignupModal()"></div>
+    
+    <div class="relative bg-dark-800 border border-white/10 rounded-3xl p-8 w-full max-w-md shadow-2xl scale-95 transition-all duration-300" id="signupContent">
+      <div class="flex justify-between items-center mb-8">
+        <h2 class="text-2xl font-bold font-display">Create Account</h2>
+        <button onclick="closeSignupModal()" class="text-slate-400 hover:text-white transition-colors bg-white/5 hover:bg-white/10 p-2 rounded-lg">
+          <svg class="w-5 h-5" fill="none" class="w-6 h-6" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      
+      <form id="signupForm" onsubmit="handleSignup(event)" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-slate-400 mb-2">Full Name</label>
+          <input type="text" id="signupName" required class="w-full bg-dark-900/50 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors placeholder:text-slate-600" placeholder="John Doe">
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-slate-400 mb-2">Mobile Number</label>
+          <input type="tel" id="signupMobile" required class="w-full bg-dark-900/50 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors placeholder:text-slate-600" placeholder="+1 234 567 8900">
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-slate-400 mb-2">Email Address</label>
+          <input type="email" id="signupEmail" required class="w-full bg-dark-900/50 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors placeholder:text-slate-600" placeholder="your@email.com">
+        </div>
+        
+        <div>
+           <label class="block text-sm font-medium text-slate-400 mb-2">Password</label>
+           <input type="password" id="signupPassword" minlength="6" required class="w-full bg-dark-900/50 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors placeholder:text-slate-600" placeholder="Min. 6 characters">
+        </div>
+
+        <div id="signupError" class="text-red-400 text-sm hidden bg-red-500/10 p-3 rounded-lg border border-red-500/20"></div>
+
+        <button type="submit" id="signupBtn" class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3.5 rounded-xl transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
+          Create Account
+        </button>
+      </form>
+      
+      <p class="text-center mt-6 text-slate-400 text-sm">
+        Already have an account? <a href="#" onclick="switchToLogin(event)" class="text-primary hover:text-primary-light font-medium transition-colors">Login</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+  
+  <!-- Application Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/firebase-init.js"></script>
+  <script src="js/auth.js"></script>
+  
+  <script>
+    // Initialize Firebase and Auth
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeFirebase();
+      authManager.init();
+      
+      // Redirect if already authenticated
+      authManager.redirectIfAuthenticated();
+      
+      // Create floating particles
+      createParticles();
+    });
+    
+    // Create animated particles with Tailwind classes
+    function createParticles() {
+      const container = document.getElementById('particles');
+      const particleCount = 20;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        // Tailwind classes for particles
+        particle.className = 'absolute rounded-full bg-primary/20 animate-float blur-sm';
+        
+        // Random size between 4px and 16px
+        const size = Math.random() * 12 + 4;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        // Random position
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        
+        // Random animation timing
+        particle.style.animationDelay = Math.random() * 5 + 's';
+        particle.style.animationDuration = (8 + Math.random() * 10) + 's';
+        
+        container.appendChild(particle);
+      }
+    }
+    
+    // Modal Functions - Updated for Tailwind logic
+    function openLoginModal() {
+      const modal = document.getElementById('loginModal');
+      const content = document.getElementById('loginContent');
+      
+      modal.classList.remove('invisible', 'opacity-0');
+      content.classList.remove('scale-95');
+      content.classList.add('scale-100');
+    }
+    
+    function closeLoginModal() {
+      const modal = document.getElementById('loginModal');
+      const content = document.getElementById('loginContent');
+      
+      modal.classList.add('invisible', 'opacity-0');
+      content.classList.add('scale-95');
+      content.classList.remove('scale-100');
+      
+      document.getElementById('loginForm').reset();
+      document.getElementById('loginError').classList.add('hidden');
+    }
+    
+    function openSignupModal() {
+      const modal = document.getElementById('signupModal');
+      const content = document.getElementById('signupContent');
+      
+      modal.classList.remove('invisible', 'opacity-0');
+      content.classList.remove('scale-95');
+      content.classList.add('scale-100');
+    }
+    
+    function closeSignupModal() {
+      const modal = document.getElementById('signupModal');
+      const content = document.getElementById('signupContent');
+      
+      modal.classList.add('invisible', 'opacity-0');
+      content.classList.add('scale-95');
+      content.classList.remove('scale-100');
+      
+      document.getElementById('signupForm').reset();
+      document.getElementById('signupError').classList.add('hidden');
+    }
+    
+    function switchToSignup(e) {
+      e.preventDefault();
+      closeLoginModal();
+      setTimeout(openSignupModal, 300); // Wait for transition
+    }
+    
+    function switchToLogin(e) {
+      e.preventDefault();
+      closeSignupModal();
+      setTimeout(openLoginModal, 300); // Wait for transition
+    }
+    
+    // Handle Login (Preserving existing logic mapping)
+    async function handleLogin(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+      const errorDiv = document.getElementById('loginError');
+      const loginBtn = document.getElementById('loginBtn');
+      
+      // Show loading state
+      loginBtn.disabled = true;
+      loginBtn.innerHTML = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Logging in...';
+      errorDiv.classList.add('hidden');
+      
+      // Attempt login
+      const result = await authManager.login(email, password);
+      
+      if (result.success) {
+        window.location.href = 'dashboard.html';
+      } else {
+        errorDiv.textContent = result.error;
+        errorDiv.classList.remove('hidden');
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Login';
+      }
+    }
+    
+    // Handle Signup (Preserving existing logic mapping)
+    async function handleSignup(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById('signupName').value;
+      const mobile = document.getElementById('signupMobile').value;
+      const email = document.getElementById('signupEmail').value;
+      const password = document.getElementById('signupPassword').value;
+      const errorDiv = document.getElementById('signupError');
+      const signupBtn = document.getElementById('signupBtn');
+      
+      // Show loading state
+      signupBtn.disabled = true;
+      signupBtn.innerHTML = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Creating account...';
+      errorDiv.classList.add('hidden');
+      
+      // Attempt signup
+      const result = await authManager.signup(email, password, name, mobile);
+      
+      if (result.success) {
+        window.location.href = 'dashboard.html';
+      } else {
+        errorDiv.textContent = result.error;
+        errorDiv.classList.remove('hidden');
+        signupBtn.disabled = false;
+        signupBtn.textContent = 'Create Account';
+      }
+    }
+    
+    // Scroll to features
+    function scrollToFeatures() {
+      document.getElementById('features').scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
