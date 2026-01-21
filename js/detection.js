@@ -103,11 +103,22 @@ class DetectionManager {
     }, APP_CONSTANTS.SCAN_DURATION + 2000); // 2s buffer over scan duration
 
     this.sensorListener.on('value', (snapshot) => {
-      const value = snapshot.val();
+      const data = snapshot.val();
       
-      if (value) {
+      if (data) {
+        // Handle both old format (string) and new format (object with contamination_percent)
+        let value;
+        let riskLevel = null;
+        
+        if (typeof data === 'object' && data.contamination_percent !== undefined) {
+          value = data.contamination_percent + '%';
+          riskLevel = data.risk_level;
+        } else {
+          value = data;
+        }
+
         console.log(`📊 Sensor reading: ${value}`);
-        this.updateDetectionUI(value);
+        this.updateDetectionUI(value, riskLevel);
         
         // Auto-complete after scan duration
         if (!this.currentDetection.completed) {
@@ -121,7 +132,7 @@ class DetectionManager {
   }
 
   // Update detection UI with live data
-  updateDetectionUI(value) {
+  updateDetectionUI(value, riskLevel) {
     const valueElement = document.getElementById('detectionValue');
     if (valueElement) {
       valueElement.textContent = value;
@@ -130,6 +141,24 @@ class DetectionManager {
       valueElement.classList.remove('animate-pulse');
       void valueElement.offsetWidth; // Trigger reflow
       valueElement.classList.add('animate-pulse');
+    }
+
+    // Update risk level display
+    const riskElement = document.getElementById('scanningRisk');
+    if (riskElement) {
+      if (riskLevel) {
+        riskElement.textContent = riskLevel;
+        // Color coding based on risk level text
+        if (riskLevel.toLowerCase().includes('safe') || riskLevel.toLowerCase().includes('low')) {
+          riskElement.className = 'text-lg font-bold mb-2 h-6 text-green-400';
+        } else if (riskLevel.toLowerCase().includes('medium')) {
+          riskElement.className = 'text-lg font-bold mb-2 h-6 text-yellow-400';
+        } else {
+          riskElement.className = 'text-lg font-bold mb-2 h-6 text-red-500';
+        }
+      } else {
+        riskElement.textContent = '';
+      }
     }
   }
 
