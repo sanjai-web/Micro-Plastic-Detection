@@ -198,16 +198,32 @@
     </div>
 
     <!-- Detection History -->
-    <div class="bg-dark-800/50 border border-white/10 rounded-3xl p-6 md:p-8 backdrop-blur-sm animate-slide-up" style="animation-delay: 0.5s;">
-      <h3 class="text-xl font-bold mb-6 flex items-center gap-3">
-        <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-        Detection History
-      </h3>
-      <div id="historyContainer" class="space-y-4">
-        <!-- History listing will be injected here -->
-        <div class="text-center py-12 text-slate-500 bg-dark-900/30 rounded-2xl border border-white/5 border-dashed">
-          <svg class="w-12 h-12 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"></circle><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l4 2"></path></svg>
-          Loading history...
+    <div class="test-history-split grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- Blood History -->
+      <div class="bg-dark-800/50 border border-white/10 rounded-3xl p-6 md:p-8 backdrop-blur-sm animate-slide-up" style="animation-delay: 0.6s;">
+        <h3 class="text-xl font-bold mb-6 flex items-center gap-3 text-slate-200">
+          <span class="text-red-500 text-2xl">🩸</span>
+          Blood Detection History
+        </h3>
+        <div id="bloodHistoryContainer" class="space-y-4">
+          <!-- Blood History listing will be injected here -->
+          <div class="text-center py-12 text-slate-500 bg-dark-900/30 rounded-2xl border border-white/5 border-dashed">
+             <div class="animate-pulse">Loading...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Water History -->
+      <div class="bg-dark-800/50 border border-white/10 rounded-3xl p-6 md:p-8 backdrop-blur-sm animate-slide-up" style="animation-delay: 0.7s;">
+        <h3 class="text-xl font-bold mb-6 flex items-center gap-3 text-slate-200">
+          <span class="text-blue-500 text-2xl">💧</span>
+          Water Detection History
+        </h3>
+        <div id="waterHistoryContainer" class="space-y-4">
+          <!-- Water History listing will be injected here -->
+          <div class="text-center py-12 text-slate-500 bg-dark-900/30 rounded-2xl border border-white/5 border-dashed">
+            <div class="animate-pulse">Loading...</div>
+          </div>
         </div>
       </div>
     </div>

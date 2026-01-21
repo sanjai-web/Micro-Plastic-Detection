@@ -62,7 +62,7 @@ class DashboardManager {
         this.updateStatusCards();
         this.renderCharts();
       } else {
-        this.showEmptyState();
+        this.displayDetectionHistory();
       }
     } catch (error) {
       console.error('❌ Error loading detections:', error);
@@ -190,61 +190,41 @@ class DashboardManager {
 
   // Display detection history
   // Display detection history
-  displayDetectionHistory(limit = 4) {
-    const container = document.getElementById('historyContainer');
-    container.innerHTML = '';
+  displayDetectionHistory(limit = 5) {
+    const bloodContainer = document.getElementById('bloodHistoryContainer');
+    const waterContainer = document.getElementById('waterHistoryContainer');
+    
+    if (!bloodContainer || !waterContainer) return;
 
-    if (this.detections.length === 0) {
-      this.showEmptyState();
+    bloodContainer.innerHTML = '';
+    waterContainer.innerHTML = '';
+
+    const bloodDetections = this.detections.filter(d => d.type === 'blood');
+    const waterDetections = this.detections.filter(d => d.type === 'water');
+
+    this.renderHistoryList(bloodContainer, bloodDetections, limit, 'Blood');
+    this.renderHistoryList(waterContainer, waterDetections, limit, 'Water');
+  }
+
+  // Render a specific history list
+  renderHistoryList(container, items, limit, type) {
+    if (items.length === 0) {
+      container.innerHTML = `
+        <div class="text-center py-8 text-slate-500 bg-dark-900/30 rounded-2xl border border-white/5 border-dashed">
+          <div class="text-4xl mb-3 opacity-20 filter grayscale">📊</div>
+          <h3 class="text-sm font-medium text-white mb-1">No ${type} History</h3>
+          <p class="text-xs text-slate-400">No detections recorded yet</p>
+        </div>
+      `;
       return;
     }
 
-    // Slice measurements based on limit
-    const itemsToShow = this.detections.slice(0, limit);
+    const itemsToShow = items.slice(0, limit);
 
     itemsToShow.forEach(detection => {
       const card = this.createHistoryCard(detection);
       container.appendChild(card);
     });
-
-    // Show Load More / Show Less button if there are more items
-    if (this.detections.length > 4) {
-      const buttonContainer = document.createElement('div');
-      buttonContainer.className = 'text-center mt-6 fade-in';
-      
-      const loadMoreBtn = document.createElement('button');
-      const isExpanded = limit > 4;
-      
-      // Tailwind styling for the button
-      loadMoreBtn.className = 'px-8 py-3 bg-dark-800 hover:bg-dark-700 text-slate-300 hover:text-white rounded-full text-sm font-bold transition-all border border-white/10 hover:border-primary/30 shadow-lg hover:shadow-primary/10 active:scale-95 flex items-center gap-2 mx-auto group';
-      
-      if (isExpanded) {
-        loadMoreBtn.innerHTML = `
-          Show Less
-          <svg class="w-4 h-4 transition-transform group-hover:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
-        `;
-        loadMoreBtn.onclick = () => {
-             this.displayDetectionHistory(4);
-             // Scroll back to history container top
-             document.getElementById('historyContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        };
-      } else {
-        loadMoreBtn.innerHTML = `
-          Show All History
-          <svg class="w-4 h-4 transition-transform group-hover:translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-        `;
-        // On click, reload with full length
-        loadMoreBtn.onclick = () => {
-             loadMoreBtn.innerHTML = '<svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Loading...';
-             setTimeout(() => {
-                this.displayDetectionHistory(this.detections.length);
-             }, 500); 
-        };
-      }
-      
-      buttonContainer.appendChild(loadMoreBtn);
-      container.appendChild(buttonContainer);
-    }
   }
 
   // Create history card
@@ -383,16 +363,9 @@ class DashboardManager {
     }
   }
 
-  // Show empty state
+  // Show empty state - REMOVED (Handled in renderHistoryList)
   showEmptyState() {
-    const container = document.getElementById('historyContainer');
-    container.innerHTML = `
-      <div class="text-center py-16 text-slate-500 bg-dark-900/30 rounded-2xl border border-white/5 border-dashed">
-        <div class="text-6xl mb-6 opacity-20 filter grayscale">📊</div>
-        <h3 class="text-lg font-medium text-white mb-2">No Test History</h3>
-        <p class="text-slate-400">Start your first detection to see results here</p>
-      </div>
-    `;
+     // Deprecated
   }
 
   // Get badge class for risk level - UPDATED for Tailwind
